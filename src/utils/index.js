@@ -19,7 +19,24 @@ function removeArrObj(_arr, _obj) {
 
 const flatten = function(arr) {
     while (arr.some(item => Array.isArray(item))) {
-        arr = [].concat(..arr)
+        arr = [].concat(...arr)
     }
     return arr
 }
+// 求数组中的众数
+var majorityElement = function(nums) {
+    var count = 1
+    var result = nums[0]
+    for (var i = 1; i < nums.length; i++) {
+        if (nums[i] === result) {
+            count++
+        } else {
+            count--
+            if (count === 0) {
+                count = 1
+                result = nums[++i]
+            }
+        }
+    }
+    return result
+};
