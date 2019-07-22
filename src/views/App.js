@@ -1,5 +1,5 @@
 import React, { Component, lazy, Suspense } from 'react'
-import { HashRouter, Route, Switch, Redirect, BrowserRouter } from 'react-router-dom'
+import { Route, Switch, Redirect, BrowserRouter } from 'react-router-dom'
 
 const MyLoadingComponent = ({ isLoading, error }) => {
   if (isLoading) {
