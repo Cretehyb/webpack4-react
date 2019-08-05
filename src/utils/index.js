@@ -16,7 +16,6 @@ function removeArrObj(_arr, _obj) {
         }
     }
 }
-
 const flatten = function(arr) {
     while (arr.some(item => Array.isArray(item))) {
         arr = [].concat(...arr)
@@ -40,3 +39,51 @@ var majorityElement = function(nums) {
     }
     return result
 };
+
+/**
+ * 获取移动操作系统类型，
+ * 0 Android
+ * 1 iOS
+ */
+function getOSType() {
+    if (/(Android)/i.test(navigator.userAgent)) {
+        return 0;
+    } else if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        return 1;
+    } else {
+        return 2;
+    }
+};
+
+/**
+ * 判断当前环境是否是微信环境
+ */
+function is_weixin() {
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
+ * 判断操作系统和平台
+ */
+var os = function (){
+    var ua = navigator.userAgent,
+    isWindowsPhone = /(?:Windows Phone)/.test(ua),
+    isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,
+    isAndroid = /(?:Android)/.test(ua),
+    isFireFox = /(?:Firefox)/.test(ua),
+    isChrome = /(?:Chrome|CriOS)/.test(ua),
+    isTablet = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua)),
+    isPhone = /(?:iPhone)/.test(ua) && !isTablet,
+    isPc = !isPhone && !isAndroid && !isSymbian;
+    return {
+        isTablet: isTablet,
+        isPhone: isPhone,
+        isAndroid: isAndroid,
+        isPc: isPc
+    };
+}();
