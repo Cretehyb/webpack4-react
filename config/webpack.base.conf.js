@@ -14,7 +14,7 @@ module.exports = {
     chunkFilename: 'js/[name]-[chunkhash:8].bundle.js'
   },
   resolve: {
-    extensions: ['.js', '.json', '.css', '.less', 'scss'],
+    extensions: ['.js', '.json', '.css', '.less', 'scss',],
     alias: {
       '@': path.resolve(__dirname, '../src'),
       components: path.resolve(__dirname, '../src/components'),

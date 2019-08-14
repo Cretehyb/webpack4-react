@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { increment } from '../../store/action'
-import homeStyles from './index.scss'
-import PO from './po'
+import homeStyles from './index.less'
+import PO from './po.js'
 const { isDev, isPro } = require('env')
 
 class Home extends Component {
@@ -20,10 +20,6 @@ class Home extends Component {
     }
   }
   goToLogin = () => {
-    // this.props.history.push({
-    //     pathname: '/login',
-    //     query: {origin: 'PC'}
-    // })
     this.props.history.push('/login?id=12412412&name=dawdkwd&key=22')
   }
   render() {

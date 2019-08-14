@@ -1,31 +1,20 @@
 import React, { Component, lazy, Suspense } from 'react'
-import { Route, Switch, Redirect, BrowserRouter } from 'react-router-dom'
-
-const MyLoadingComponent = ({ isLoading, error }) => {
-  if (isLoading) {
-    return <div>Loading...</div>
-  } else if (error) {
-    return <div>Sorry, there was a problem loading the page.</div>
-  } else {
-    return null
-  }
-}
-
-const Login = lazy(() => import('./login/index.js'))
-const Home = lazy(() => import('./home/index.js'))
+import { Route, Switch, Redirect, HashRouter } from 'react-router-dom'
+import * as Comp from '@/asyncComponent/index.js' // 按需加载组件
+import MyLoadingComponent from '@/components/loading/index.js'; // loading应用层
 
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
+      <HashRouter>
         <Suspense fallback={<MyLoadingComponent />}>
           <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/home" component={Home} />
+            <Route path="/login" component={Comp.Login} />
+            <Route path="/home" component={Comp.Home} />
             <Redirect from="/" to="/home" />
           </Switch>
         </Suspense>
-      </BrowserRouter>
+      </HashRouter>
     )
   }
 }
