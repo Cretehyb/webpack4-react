@@ -1,5 +1,5 @@
 import React ,{Component} from 'react'
-import childComponent from'./po.scss'
+import childComponent from'./po.less'
 
 class Po extends Component {
     state = {  }
