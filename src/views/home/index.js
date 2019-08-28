@@ -1,44 +1,32 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { increment } from '../../store/actions/increment'
 import homeStyles from './index.less'
 import PO from './po.js'
 const { isDev, isPro } = require('env')
+import fish from '../../assets/img/fish.jpg'
 
-class Home extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {}
-  }
+class Home extends PureComponent {
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.content !== this.props.content) {
-      return true
-    } else {
-      return false
-    }
-  }
   goToLogin = () => {
+    
     this.props.history.push('/login?id=12412412&name=dawdkwd&key=22')
   }
+  haha = () => {
+    this.props.increment({number: 10})
+  }
   render() {
-    // const imgSource = isDev
-    //   ? '../../assets/img/candy.jpg'
-    //   : isPro
-    //   ? './img/candy.jpg'
-    //   : ''
-    
     console.log(this.props.number)
     return (
       <div className={homeStyles.div}>
         <h3>主页</h3>
         <PO></PO>
-        <span>哈哈</span>
+        <span onClick={this.haha}>哈哈</span>
         <div onClick={this.goToLogin}>前往登录页</div>
-        <div>
-          <img src={'../../assets/img/candy.jpg'} alt="haha" />
+        <div className={homeStyles.img}>
         </div>
+        <img src={fish} alt="haha" />
       </div>
     )
   }
@@ -48,8 +36,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  // increment
-  increment: bindActionCreators(increment, dispatch) 
+  increment: bindActionCreators(increment, dispatch)
 })
 
 export default connect(

@@ -2,19 +2,24 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { isDev } = require('./env')
+const settings = require('./settings')
+const { isDev, isPro } = require('./env')
+const chalk = require('chalk')
 
 module.exports = {
   entry: {
-    app: './src/main.js'
+    babelPolyfill: '@babel/polyfill',
+    reactHot: 'react-hot-loader/patch',
+    app: settings.common.entryPath
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: 'js/[name]-bundle.js',
-    chunkFilename: 'js/[name]-[chunkhash:8].bundle.js'
+    chunkFilename: 'js/[name]-[chunkhash:8].chunk.js',
+    publicPath: '' //js文件内部引用其他文件的路径
   },
   resolve: {
-    extensions: ['.js', '.json', '.css', '.less', 'scss',],
+    extensions: ['.js', '.json', '.css', '.less', 'scss'],
     alias: {
       '@': path.resolve(__dirname, '../src'),
       components: path.resolve(__dirname, '../src/components'),
@@ -22,12 +27,13 @@ module.exports = {
       env: path.resolve(__dirname, 'env.js')
     }
   },
+
   module: {
     rules: [
       {
         test: /\.css$/,
         use: [
-          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          isDev ? 'style-loader/useable' : MiniCssExtractPlugin.loader,
           'css-loader?modules',
           'postcss-loader'
         ]
@@ -64,15 +70,30 @@ module.exports = {
       },
       {
         // images
-        test: /\.(png|jpg|jpeg|gif|svg)\$/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            limit: 10000,
-            name: '[name].[sha512:hash:base64:10].[ext]',
-            outputPath: 'public/img/'
+        test: /\.(png|jpg|jpeg|gif|svg)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 5 * 1024,
+              name: '[name].[hash:8].[ext]',
+              // "../img/"为css图片路径，"./img/"为imgsrc的图片路径
+              publicPath: '../img/',
+              outputPath: 'img/'
+            }
+          },
+          {
+            // 压缩图片
+            loader: 'img-loader',
+            options: {
+              plugins: [
+                require('imagemin-pngquant')({
+                  quality: '80'
+                })
+              ]
+            }
           }
-        }
+        ]
       },
       {
         test: /\.(ttf|eot|woff|woff2)$/,
@@ -80,7 +101,9 @@ module.exports = {
           loader: 'url-loader',
           options: {
             limit: 50000,
-            name: 'fonts/[name].[ext]'
+            name: '[name].[hash:7].[ext]',
+            publicPath: 'fonts/',
+            outputPath: 'fonts/'
           }
         }
       }
@@ -93,14 +116,52 @@ module.exports = {
       favicon: 'public/favicon.ico',
       hash: true,
       chunks: ['app'],
+      cdn: {
+        css: [],
+        js: []
+      },
       minify: isDev
         ? {}
         : {
             removeComments: true,
             collapseWhitespace: true,
-            minifyCSS: true,
+            minifyCSS: true
           }
     }),
-    new ProgressBarWebpackPlugin()
-  ]
+    new ProgressBarWebpackPlugin({
+      format: 'build start [:bar] :percent (:elapsed seconds)'
+    })
+  ],
+  // optimization: {
+  //   // 分割代码
+  //   splitChunks: {
+  //     cacheGroups: {
+  //       // 其次: 打包业务中公共代码
+  //       public: {
+  //         name: 'common',
+  //         chunks: 'all',
+  //         minSize: 1, // 只要超出1字节就生成一个新包
+  //         priority: 0
+  //       },
+  //       // 首先: 打包node_modules中的文件
+  //       vendor: {
+  //         // 剥离第三方插件
+  //         name: 'vendor', // 打包后的文件名，随意命名
+  //         test: /[\\/]node_modules[\\/]/, // 指定是node_modules下的第三方包
+  //         chunks: 'all',
+  //         priority: 10 // 设置优先级，防止和自定义的公共代码提取时被覆盖，不进行打包
+  //       }
+  //     }
+  //   }
+  // },
+  // 忽略文件过大提示
+  performance: {
+    hints: 'warning', // 枚举
+    maxAssetSize: 30000000, // 整数类型（以字节为单位）
+    maxEntrypointSize: 50000000, // 整数类型（以字节为单位）
+    assetFilter: function(assetFilename) {
+      // 提供资源文件名的断言函数
+      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js')
+    }
+  }
 }

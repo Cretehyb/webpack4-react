@@ -1,5 +1,15 @@
 {
-  "presets": ["@babel/preset-env", "@babel/preset-react"],
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        // 按需注入
+        "useBuiltIns": "usage",
+        "corejs": 2 // 这里需要注意：是根据你的版本来写
+      }
+    ],
+    "@babel/preset-react"
+  ],
   "plugins": [
     [
       "@babel/plugin-transform-runtime",
@@ -8,10 +18,9 @@
         "helpers": true,
         "regenerator": true,
         "useESModules": false
-      },
+      }
     ],
-    [
-      "@babel/plugin-proposal-class-properties"
-    ],
-  ],
+    ["@babel/plugin-proposal-class-properties"],
+    ["react-hot-loader/babel"] // react热重载(修改局部刷新)
+  ]
 }

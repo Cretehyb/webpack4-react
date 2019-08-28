@@ -8,21 +8,15 @@ const initialState = {
 export const incrementReducer = (state = initialState, action) => {
   switch (action.type) {
     case INCREMENT:
-      state.number += 1
       return { ...state }
-      break;
     case INCREMENT_SUCCESS:
-      return {
-        ...state,
-        ...action.payload
-      }
-      ;
+      state.number +=100
+      return {...state}
     case INCREMENT_FAILURE:
       return {
         ...state,
         error: action.payload
       }
-      break;
     default:
       return state
   }
