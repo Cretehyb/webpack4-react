@@ -2,19 +2,17 @@ import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { increment } from '../../store/actions/increment'
-import homeStyles from './index.less'
 import PO from './po.js'
-const { isDev, isPro } = require('env')
-import fish from '../../assets/img/fish.jpg'
+import homeStyles from './index.less'
+// const fish from '../../assets/img/fish.jpg'
 
 class Home extends PureComponent {
-
   goToLogin = () => {
-    
     this.props.history.push('/login?id=12412412&name=dawdkwd&key=22')
   }
   haha = () => {
-    this.props.increment({number: 10})
+    const randomId = String(Math.floor(Math.random() * 1000000000000))
+    this.props.increment({ branchId: randomId })
   }
   render() {
     console.log(this.props.number)
@@ -22,17 +20,19 @@ class Home extends PureComponent {
       <div className={homeStyles.div}>
         <h3>主页</h3>
         <PO></PO>
-        <span onClick={this.haha}>哈哈</span>
+        <button onClick={this.haha}>随机更新机构号</button>
+        <div>redux更新的机构号：{this.props.branchId}</div>
+        <div>点击更新的次数：{this.props.number}</div>
         <div onClick={this.goToLogin}>前往登录页</div>
-        <div className={homeStyles.img}>
-        </div>
-        <img src={fish} alt="haha" />
+        <div className={homeStyles.img}></div>
+        <img src={require('../../assets/img/fish.jpg')} alt="未正确加载图片" />
       </div>
     )
   }
 }
 const mapStateToProps = state => ({
-  number: state.incrementReducer.number // incrementReducer类似命名空间，也是reducer的名称
+  number: state.incrementReducer.number,
+  branchId: state.incrementReducer.branchId
 })
 
 const mapDispatchToProps = dispatch => ({

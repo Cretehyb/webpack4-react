@@ -8,9 +8,9 @@ const chalk = require('chalk')
 
 module.exports = {
   entry: {
-    babelPolyfill: '@babel/polyfill',
-    reactHot: 'react-hot-loader/patch',
-    app: settings.common.entryPath
+    babelPolyfill: '@babel/polyfill', // babel入口
+    reactHot: 'react-hot-loader/patch', // 热重载入口
+    app: settings.common.entryPath // 应用入口
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
@@ -33,7 +33,15 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          isDev ? 'style-loader/useable' : MiniCssExtractPlugin.loader,
+          isDev
+            ? 'style-loader/useable'
+            : //  MiniCssExtractPlugin.loader,
+              {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  publicPath: '../'
+                }
+              },
           'css-loader?modules',
           'postcss-loader'
         ]
@@ -41,7 +49,15 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          isDev
+            ? 'style-loader'
+            : // MiniCssExtractPlugin.loader,
+              {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  publicPath: '../'
+                }
+              },
           'css-loader?modules',
           'postcss-loader',
           'less-loader'
@@ -50,7 +66,15 @@ module.exports = {
       {
         test: /\.sass|scss$/,
         use: [
-          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          isDev
+            ? 'style-loader'
+            : // MiniCssExtractPlugin.loader,
+              {
+                loader: MiniCssExtractPlugin.loader,
+                options: {
+                  publicPath: '../'
+                }
+              },
           'css-loader?modules',
           'postcss-loader',
           'sass-loader'
@@ -76,10 +100,9 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 5 * 1024,
-              name: '[name].[hash:8].[ext]',
-              // "../img/"为css图片路径，"./img/"为imgsrc的图片路径
-              publicPath: '../img/',
-              outputPath: 'img/'
+              name: 'img/[name].[hash:8].[ext]'
+              // publicPath: '../img/',
+              // outputPath: 'img/'
             }
           },
           {
