@@ -111,7 +111,22 @@ module.exports = {
             options: {
               plugins: [
                 require('imagemin-pngquant')({
-                  quality: '80'
+                  quality: '80',
+                  speed: 4
+                }),
+                require('imagemin-gifsicle')({
+                  interlaced: false
+                }),
+                require('imagemin-mozjpeg')({
+                  progressive: true,
+                  arithmetic: false,
+                  quality: 65
+                }),
+                require('imagemin-svgo')({
+                  plugins: [
+                    { removeTitle: true },
+                    { convertPathData: false }
+                  ]
                 })
               ]
             }
