@@ -8,12 +8,11 @@ module.exports = merge(baseConfig, {
   mode: 'development',
   devtool: settings.dev.sourceMap,
   devServer: {
-    contentBase: path.join(__dirname, '../src'),
     host: settings.dev.host,
     port: settings.dev.port,
-    hot: true,
-    inline: true, // 自启浏览器
-    overlay: true, // 浏览器页面上显示错误
+    open: settings.dev.autoOpenBrowser,
+    hot: settings.dev.hot,
+    overlay: settings.dev.overlay,
     publicPath: settings.dev.assetsPublicPath,
     proxy: settings.dev.proxyTable
   },

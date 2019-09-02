@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { increment } from '../../store/actions/increment'
 import PO from './po.js'
 import homeStyles from './index.less'
-// const fish from '../../assets/img/fish.jpg'
+import {flatten} from '../../utils/index.js'
 
 class Home extends PureComponent {
   goToLogin = () => {
@@ -15,6 +15,7 @@ class Home extends PureComponent {
     this.props.increment({ branchId: randomId })
   }
   render() {
+    const a = flatten([1,5,1,[9,5,45,45]])
     console.log(this.props.number)
     return (
       <div className={homeStyles.div}>

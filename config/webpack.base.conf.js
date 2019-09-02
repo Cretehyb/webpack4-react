@@ -1,30 +1,27 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const settings = require('./settings')
 const { isDev, isPro } = require('./env')
-const chalk = require('chalk')
+const settings = require('./settings')
 
 module.exports = {
   entry: {
-    babelPolyfill: '@babel/polyfill', // babel入口
-    reactHot: 'react-hot-loader/patch', // 热重载入口
+    babelPolyfill: settings.common.babelPolyfill, // babel入口
+    reactHot: settings.common.reactHot, // 热重载入口
     app: settings.common.entryPath // 应用入口
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: 'js/[name]-bundle.js',
-    chunkFilename: 'js/[name]-[chunkhash:8].chunk.js',
-    publicPath: '' //js文件内部引用其他文件的路径
+    path: settings.common.outputPath,
+    filename: settings.common.outputFilename,
+    chunkFilename: settings.common.outputChunkFilename
   },
   resolve: {
-    extensions: ['.js', '.json', '.css', '.less', 'scss'],
+    extensions: settings.common.extensions,
     alias: {
-      '@': path.resolve(__dirname, '../src'),
-      components: path.resolve(__dirname, '../src/components'),
-      public: path.resolve(__dirname, '../public'),
-      env: path.resolve(__dirname, 'env.js')
+      '@': settings.common.srcPath,
+      components: settings.common.components,
+      public: settings.common.public,
+      env: settings.common.env
     }
   },
 
@@ -35,13 +32,7 @@ module.exports = {
         use: [
           isDev
             ? 'style-loader/useable'
-            : //  MiniCssExtractPlugin.loader,
-              {
-                loader: MiniCssExtractPlugin.loader,
-                options: {
-                  publicPath: '../'
-                }
-              },
+            : settings.common.MiniCssExtractPluginConfig,
           'css-loader?modules',
           'postcss-loader'
         ]
@@ -49,15 +40,7 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          isDev
-            ? 'style-loader'
-            : // MiniCssExtractPlugin.loader,
-              {
-                loader: MiniCssExtractPlugin.loader,
-                options: {
-                  publicPath: '../'
-                }
-              },
+          isDev ? 'style-loader' : settings.common.MiniCssExtractPluginConfig,
           'css-loader?modules',
           'postcss-loader',
           'less-loader'
@@ -66,15 +49,7 @@ module.exports = {
       {
         test: /\.sass|scss$/,
         use: [
-          isDev
-            ? 'style-loader'
-            : // MiniCssExtractPlugin.loader,
-              {
-                loader: MiniCssExtractPlugin.loader,
-                options: {
-                  publicPath: '../'
-                }
-              },
+          isDev ? 'style-loader' : settings.common.MiniCssExtractPluginConfig,
           'css-loader?modules',
           'postcss-loader',
           'sass-loader'
@@ -93,7 +68,7 @@ module.exports = {
         }
       },
       {
-        // images
+        // 图片打包处理
         test: /\.(png|jpg|jpeg|gif|svg)$/,
         use: [
           {
@@ -101,8 +76,6 @@ module.exports = {
             options: {
               limit: 5 * 1024,
               name: 'img/[name].[hash:8].[ext]'
-              // publicPath: '../img/',
-              // outputPath: 'img/'
             }
           },
           {
@@ -111,22 +84,23 @@ module.exports = {
             options: {
               plugins: [
                 require('imagemin-pngquant')({
+                  // 处理png格式
                   quality: '80',
                   speed: 4
                 }),
                 require('imagemin-gifsicle')({
+                  // 处理gif格式
                   interlaced: false
                 }),
                 require('imagemin-mozjpeg')({
+                  // 处理jpg|jpeg格式
                   progressive: true,
                   arithmetic: false,
                   quality: 65
                 }),
                 require('imagemin-svgo')({
-                  plugins: [
-                    { removeTitle: true },
-                    { convertPathData: false }
-                  ]
+                  // 处理svg格式
+                  plugins: [{ removeTitle: true }, { convertPathData: false }]
                 })
               ]
             }
@@ -134,14 +108,13 @@ module.exports = {
         ]
       },
       {
+        // 字体打包
         test: /\.(ttf|eot|woff|woff2)$/,
         use: {
           loader: 'url-loader',
           options: {
             limit: 50000,
-            name: '[name].[hash:7].[ext]',
-            publicPath: 'fonts/',
-            outputPath: 'fonts/'
+            name: 'fonts/[name].[hash:7].[ext]'
           }
         }
       }
@@ -153,7 +126,8 @@ module.exports = {
       template: 'public/index.html',
       favicon: 'public/favicon.ico',
       hash: true,
-      chunks: ['app'],
+      showErrors: isDev ? true : false,
+      // chunks: ['app'], // 用于多入口文件
       cdn: {
         css: [],
         js: []
@@ -163,43 +137,24 @@ module.exports = {
         : {
             removeComments: true,
             collapseWhitespace: true,
-            minifyCSS: true
+            minifyCSS: true,
+            minifyJS: true,
+            removeAttributeQuotes: true
           }
     }),
+    // 进度条设置
     new ProgressBarWebpackPlugin({
       format: 'build start [:bar] :percent (:elapsed seconds)'
     })
   ],
-  // optimization: {
-  //   // 分割代码
-  //   splitChunks: {
-  //     cacheGroups: {
-  //       // 其次: 打包业务中公共代码
-  //       public: {
-  //         name: 'common',
-  //         chunks: 'all',
-  //         minSize: 1, // 只要超出1字节就生成一个新包
-  //         priority: 0
-  //       },
-  //       // 首先: 打包node_modules中的文件
-  //       vendor: {
-  //         // 剥离第三方插件
-  //         name: 'vendor', // 打包后的文件名，随意命名
-  //         test: /[\\/]node_modules[\\/]/, // 指定是node_modules下的第三方包
-  //         chunks: 'all',
-  //         priority: 10 // 设置优先级，防止和自定义的公共代码提取时被覆盖，不进行打包
-  //       }
-  //     }
-  //   }
-  // },
   // 忽略文件过大提示
   performance: {
     hints: 'warning', // 枚举
-    maxAssetSize: 30000000, // 整数类型（以字节为单位）
-    maxEntrypointSize: 50000000, // 整数类型（以字节为单位）
+    maxAssetSize: 300000, // 整数类型（以字节为单位）
+    maxEntrypointSize: 500000, // 整数类型（以字节为单位）
     assetFilter: function(assetFilename) {
       // 提供资源文件名的断言函数
       return assetFilename.endsWith('.css') || assetFilename.endsWith('.js')
     }
-  }
+  },
 }
