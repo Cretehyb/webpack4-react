@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import loginStyles from './index.less'
+import {flatten} from '../../utils/'
 
 class login extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class login extends Component {
   }
 
   render() {
+    const b = flatten([1,5,1,[9,5,45,45]])
     console.log(this.props)
     return (
       <div>

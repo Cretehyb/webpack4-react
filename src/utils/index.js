@@ -16,7 +16,7 @@ function removeArrObj(_arr, _obj) {
         }
     }
 }
-const flatten = function(arr) {
+export const flatten = function(arr) {
     while (arr.some(item => Array.isArray(item))) {
         arr = [].concat(...arr)
     }

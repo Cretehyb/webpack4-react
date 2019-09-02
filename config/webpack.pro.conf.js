@@ -4,34 +4,19 @@ const baseConfig = require('./webpack.base.conf.js')
 const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-// const glob = require("glob-all");
+const settings = require('./settings')
 
 module.exports = merge(baseConfig, {
   mode: 'production',
-  output: {},
-  module: {
-    rules: [
-      // {
-      //   //页面中会用到img标签，img引用的图片地址也需要一个loader来处理,这样再打包后的html文件下img就可以正常引用图片路径了
-      //   test: /\.(htm|html)$/,
-      //   use: {
-      //     loader: 'html-loader',
-      //     options: {
-      //       attrs: ['img:src', 'img:data-src', 'audio:src'],
-      //       minimize: true
-      //     }
-      //   }
-      // }
-    ]
-  },
+  devtool: settings.build.sourceMap,
   plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[contenthash:7].min.css',
-      chunkFilename: 'css/[id]-[contenthash:12].min.css',
+      chunkFilename: 'css/[id]-[contenthash:12].min.css'
     })
     // new BundleAnalyzerPlugin()
   ],
@@ -62,6 +47,26 @@ module.exports = merge(baseConfig, {
           ignore: ['index.html', 'favicon.ico'] // 忽略模板html和网页图标
         }
       ])
-    ]
-  }
+    ],
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          name: 'commons',
+          chunks: 'initial',
+          minChunks: 2
+        },
+        vendor: {
+          // name: "vendor", // 注释这个就可以拆分vendor.js
+          chunks: 'all',
+          test: /[\\/]node_modules[\\/]/,
+          minChunks: 1, // 被引用的最低次数
+          maxInitialRequests: 5, // 一个入口最大的并行请求数
+          minSize: 25, // 形成一个新代码块最小的体积
+          priority: 100, // 缓存组打包的先后优先级
+          automaticNameDelimiter: '-' // 名称定界符
+        }
+      }
+    }
+  },
+  
 })
