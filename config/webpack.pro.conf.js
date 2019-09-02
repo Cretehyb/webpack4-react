@@ -11,9 +11,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 module.exports = merge(baseConfig, {
   mode: 'production',
-  output: {
-   
-  },
+  output: {},
   module: {
     rules: [
       // {
@@ -22,7 +20,8 @@ module.exports = merge(baseConfig, {
       //   use: {
       //     loader: 'html-loader',
       //     options: {
-      //       publicPath: './img/'
+      //       attrs: ['img:src', 'img:data-src', 'audio:src'],
+      //       minimize: true
       //     }
       //   }
       // }
@@ -32,7 +31,7 @@ module.exports = merge(baseConfig, {
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[contenthash:7].min.css',
-      chunkFilename: 'css/[id]-[contenthash:12].min.css'
+      chunkFilename: 'css/[id]-[contenthash:12].min.css',
     })
     // new BundleAnalyzerPlugin()
   ],
