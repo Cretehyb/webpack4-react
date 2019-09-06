@@ -1,5 +1,5 @@
 // 删除数组中指定的对象
-function removeArrObj(_arr, _obj) {
+export function removeArrObj(_arr, _obj) {
     var length = _arr.length;
     for (var i = 0; i < length; i++) {
         if (_arr[i] == _obj) {
@@ -23,7 +23,7 @@ export const flatten = function(arr) {
     return arr
 }
 // 求数组中的众数
-var majorityElement = function(nums) {
+export const majorityElement = function(nums) {
     var count = 1
     var result = nums[0]
     for (var i = 1; i < nums.length; i++) {
@@ -45,7 +45,7 @@ var majorityElement = function(nums) {
  * 0 Android
  * 1 iOS
  */
-function getOSType() {
+export function getOSType() {
     if (/(Android)/i.test(navigator.userAgent)) {
         return 0;
     } else if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
@@ -58,7 +58,7 @@ function getOSType() {
 /**
  * 判断当前环境是否是微信环境
  */
-function is_weixin() {
+export function is_weixin() {
     var ua = navigator.userAgent.toLowerCase();
     if (ua.match(/MicroMessenger/i) == "micromessenger") {
         return true;
@@ -70,7 +70,7 @@ function is_weixin() {
 /**
  * 判断操作系统和平台
  */
-var os = function (){
+export const os = function (){
     var ua = navigator.userAgent,
     isWindowsPhone = /(?:Windows Phone)/.test(ua),
     isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,

@@ -3,6 +3,10 @@ const webpack = require('webpack')
 const merge = require('webpack-merge')
 const baseConfig = require('./webpack.base.conf.js')
 const settings = require('./settings')
+const friendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin')
+const notifier = require('node-notifier')
+const packageConfig = require('../package.json')
+const utils = require('./utils')
 
 module.exports = merge(baseConfig, {
   mode: 'development',
@@ -16,8 +20,18 @@ module.exports = merge(baseConfig, {
     publicPath: settings.dev.assetsPublicPath,
     proxy: settings.dev.proxyTable
   },
-  plugins: [new webpack.HotModuleReplacementPlugin({})],
-  optimization: {
-    usedExports: true
-  }
+  plugins: [
+    new webpack.HotModuleReplacementPlugin({}),
+    new friendlyErrorsWebpackPlugin({
+      compilationSuccessInfo: {
+        messages: [
+          `Your application is running here: http://${settings.dev.host}:${settings.dev.port}`
+        ],
+        notes: ['可以开发了,兄弟！']
+      },
+      onErrors: settings.dev.notifyOnErrors
+        ? utils.createNotifierCallback()
+        : undefined
+    })
+  ]
 })

@@ -30,12 +30,13 @@ module.exports = {
   dev: {
     host: '127.0.0.1',
     port: 8090, //端口号
-    autoOpenBrowser: true, //是否自动打开浏览器
+    autoOpenBrowser: false, //是否自动打开浏览器
     hot: true, //热更新
     overlay: true, // 浏览器页面上显示错误
     assetsSubDirectory: '', //生成资源路径二级
     assetsPublicPath: '', //生成资源路径
     sourceMap: 'cheap-module-eval-source-map', //生成映射文件
-    proxyTable: {} //代理
+    proxyTable: {}, //代理
+    notifyOnErrors: true
   }
 }
