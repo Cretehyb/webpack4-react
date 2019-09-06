@@ -33,45 +33,74 @@ instance.interceptors.response.use(
   }
 )
 
-export default {
-  get(url, param) {
-    instance({
-      method: 'get',
-      url,
-      params: param
-    })
-      .then(res => {
-        console.log(res.data.result)
-        const { result } = res.data
-        return Promise.resolve({
-          success: true,
-          ...result
+export default class Request {
+  static get(url, params = {}) {
+    return new Promise((resolve, reject) => {
+      instance
+        .get(url,params)
+        .then(({ data }) => {
+          if (data.code === 200) {
+            const {result} = data
+            resolve(result);
+          } else {
+            reject('failed')
+          }
         })
-      })
-      .catch(err => {
-        return Promise.reject({
-          success: false,
-          message: err
+        .catch(err => {
+          console.log(err)
+        });
+    });
+  }
+
+  static delete(url, params = {}) {
+    return new Promise((resolve, reject) => {
+      instance
+        .delete(url, params )
+        .then(({ data }) => {
+          resolve(data);
         })
-      })
-  },
-  post(url, param) {
-    instance({
-      method: 'post',
-      url,
-      data: JSON.stringify(param)
-    })
-      .then(res => {
-        return Promise.resolve({
-          success: true,
-          ...res
+        .catch(err => {
+          reject({ err: JSON.stringify(err) });
+        });
+    });
+  }
+
+  static post(url, params = {}) {
+    return new Promise((resolve, reject) => {
+      instance
+        .post(url, params)
+        .then(({ data }) => {
+          resolve(data);
         })
-      })
-      .catch(err => {
-        return Promise.reject({
-          success: false,
-          message: err
+        .catch(err => {
+          reject({ err: JSON.stringify(err) });
+        });
+    });
+  }
+
+  static put(url, params = {}) {
+    return new Promise((resolve, reject) => {
+      instance
+        .post(url, params)
+        .then(({ data }) => {
+          resolve(data);
         })
-      })
+        .catch(err => {
+          reject({ err: JSON.stringify(err) });
+        });
+    });
+  }
+
+  static patch(url, params = {}) {
+    return new Promise((resolve, reject) => {
+      instance
+        .patch(url, params)
+        .then(({ data }) => {
+          resolve(data);
+        })
+        .catch(err => {
+          reject({ err: JSON.stringify(err) });
+        });
+    });
   }
 }
