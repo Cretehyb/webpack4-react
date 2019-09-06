@@ -1,7 +1,8 @@
 import request from './request.js';
 
-export const Increment = (params = {}) => {
-    const url = '/'
-    request.get(url, params)
+const Api = {
+    Increment: () => request.get('./'),
 }
+
+export default Api
  

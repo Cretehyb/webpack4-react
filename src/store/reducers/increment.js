@@ -5,9 +5,7 @@ import {
 } from '../actions/increment'
 
 const initialState = {
-  // 自定义的初始状态
-  number: 0,
-  branchId: ''
+  musicList: []
 }
 
 export const incrementReducer = (state = initialState, action) => {
@@ -15,8 +13,7 @@ export const incrementReducer = (state = initialState, action) => {
     case INCREMENT:
       return { ...state }
     case INCREMENT_SUCCESS:
-      state.number += 1
-      state.branchId = action.payload.branchId
+      state.musicList = action.payload
       return { ...state }
     case INCREMENT_FAILURE:
       return {
