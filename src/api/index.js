@@ -1,6 +1,7 @@
 import request from './request.js';
 
-export const increment = (params = {}) => {
-    request.get('/', params)
+export const Increment = (params = {}) => {
+    const url = '/'
+    request.get(url, params)
 }
  

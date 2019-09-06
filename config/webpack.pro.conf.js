@@ -1,14 +1,20 @@
 const path = require('path')
 const merge = require('webpack-merge')
 const baseConfig = require('./webpack.base.conf.js')
-const CleanWebpackPlugin = require('clean-webpack-plugin').CleanWebpackPlugin
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 // const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 const settings = require('./settings')
+const utils = require('./utils')
 
+const commonOptions = {
+  chunks: 'all',
+  reuseExistingChunk: true
+}
 module.exports = merge(baseConfig, {
   mode: 'production',
   devtool: settings.build.sourceMap,
@@ -17,10 +23,17 @@ module.exports = merge(baseConfig, {
     new MiniCssExtractPlugin({
       filename: 'css/[name]-[contenthash:7].min.css',
       chunkFilename: 'css/[id]-[contenthash:12].min.css'
+    }),
+    // 配置 PWA
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true
     })
     // new BundleAnalyzerPlugin()
   ],
   optimization: {
+    usedExports: true,
+    moduleIds: 'hashed',
     minimizer: [
       new UglifyJSPlugin({
         cache: true, // 开启缓存
@@ -52,8 +65,14 @@ module.exports = merge(baseConfig, {
       cacheGroups: {
         commons: {
           name: 'commons',
-          chunks: 'initial',
-          minChunks: 2
+          minChunks: 2,
+          ...commonOptions
+        },
+        polyfill: {
+          test: /[\\/]node_modules[\\/](core-js|raf|@babel|babel)[\\/]/,
+          name: 'polyfill',
+          priority: 2,
+          ...commonOptions
         },
         vendor: {
           // name: "vendor", // 注释这个就可以拆分vendor.js
@@ -67,6 +86,6 @@ module.exports = merge(baseConfig, {
         }
       }
     }
-  },
-  
+  }
 })
+
