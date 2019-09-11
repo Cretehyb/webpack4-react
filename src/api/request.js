@@ -1,10 +1,11 @@
 import axios from 'axios'
-// import qs from 'qs'
+import qs from 'qs'
+import { timeOut, withCredentials } from '../utils/config'
 
 let instance = axios.create({
-  baseURL: 'https://api.apiopen.top/musicBroadcasting',
-  timeout: 5000,
-  withCredentials: false
+  baseURL: process.env.BASE_API,
+  timeout: timeOut,
+  withCredentials: withCredentials
   // headers: {'Authorization' : AUTH_TOKEN}
 })
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN; // token储存在header
@@ -37,32 +38,32 @@ export default class Request {
   static get(url, params = {}) {
     return new Promise((resolve, reject) => {
       instance
-        .get(url,params)
+        .get(url, params)
         .then(({ data }) => {
           if (data.code === 200) {
-            const {result} = data
-            resolve(result);
+            const { result } = data
+            resolve(result)
           } else {
             reject('failed')
           }
         })
         .catch(err => {
           console.log(err)
-        });
-    });
+        })
+    })
   }
 
   static delete(url, params = {}) {
     return new Promise((resolve, reject) => {
       instance
-        .delete(url, params )
+        .delete(url, params)
         .then(({ data }) => {
-          resolve(data);
+          resolve(data)
         })
         .catch(err => {
-          reject({ err: JSON.stringify(err) });
-        });
-    });
+          reject({ err: JSON.stringify(err) })
+        })
+    })
   }
 
   static post(url, params = {}) {
@@ -70,12 +71,12 @@ export default class Request {
       instance
         .post(url, params)
         .then(({ data }) => {
-          resolve(data);
+          resolve(data)
         })
         .catch(err => {
-          reject({ err: JSON.stringify(err) });
-        });
-    });
+          reject({ err: JSON.stringify(err) })
+        })
+    })
   }
 
   static put(url, params = {}) {
@@ -83,12 +84,12 @@ export default class Request {
       instance
         .post(url, params)
         .then(({ data }) => {
-          resolve(data);
+          resolve(data)
         })
         .catch(err => {
-          reject({ err: JSON.stringify(err) });
-        });
-    });
+          reject({ err: JSON.stringify(err) })
+        })
+    })
   }
 
   static patch(url, params = {}) {
@@ -96,11 +97,11 @@ export default class Request {
       instance
         .patch(url, params)
         .then(({ data }) => {
-          resolve(data);
+          resolve(data)
         })
         .catch(err => {
-          reject({ err: JSON.stringify(err) });
-        });
-    });
+          reject({ err: JSON.stringify(err) })
+        })
+    })
   }
 }

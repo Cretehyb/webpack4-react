@@ -1,4 +1,7 @@
 'use strict'
+const notifier = require('node-notifier')
+const packageConfig = require('../package.json')
+
 exports.createNotifierCallback = () => {
   return (severity, errors) => {
     if (severity !== 'error') return

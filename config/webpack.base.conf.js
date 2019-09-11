@@ -1,7 +1,7 @@
 'use strict'
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin')
+const SimpleProgressPlugin = require('webpack-simple-progress-plugin')
 const { isDev, isPro } = require('./env')
 const settings = require('./settings')
 
@@ -144,9 +144,7 @@ module.exports = {
           }
     }),
     // 进度条设置
-    new ProgressBarWebpackPlugin({
-      format: 'build start [:bar] :percent (:elapsed seconds)'
-    })
+    new SimpleProgressPlugin()
   ],
   // 忽略文件过大提示
   performance: {

@@ -20,7 +20,7 @@
         "useESModules": false
       }
     ],
-    ["@babel/plugin-proposal-class-properties"],
-    ["react-hot-loader/babel"] // react热重载(修改局部刷新)
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    ["react-hot-loader/babel"], // react热重载(修改局部刷新)
   ]
 }

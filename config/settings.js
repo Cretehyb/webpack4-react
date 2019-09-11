@@ -1,6 +1,7 @@
+'use strict'
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-
+const { prodUrl, devUrl } = require('../src/utils/config.js')
 module.exports = {
   common: {
     entryPath: path.resolve(__dirname, '../src/main.js'), //入口文件路径
@@ -23,11 +24,21 @@ module.exports = {
     }
   },
   build: {
+    env: {
+      NODE_ENV: '"production"',
+      BASE_API: `${prodUrl}`
+    },
     assetsSubDirectory: '', //生成资源路径二级
     assetsPublicPath: '', //生成资源路径
-    sourceMap: '' //生成映射文件
+    sourceMap: '', //生成映射文件
+    productionGzip: true,
+    productionGzipExtensions: ['js', 'css']
   },
   dev: {
+    env: {
+      NODE_ENV: '"development"',
+      BASE_API: `${devUrl}`
+    },
     host: '127.0.0.1',
     port: 8090, //端口号
     autoOpenBrowser: false, //是否自动打开浏览器
@@ -37,6 +48,8 @@ module.exports = {
     assetsPublicPath: '', //生成资源路径
     sourceMap: 'cheap-module-eval-source-map', //生成映射文件
     proxyTable: {}, //代理
-    notifyOnErrors: true
+    notifyOnErrors: true,
+    stats: 'errors-only',
+    quiet: true
   }
 }
