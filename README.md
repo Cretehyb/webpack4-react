@@ -1,1 +1,1 @@
-# webpack4-react  :star:
+# webpack4-react
