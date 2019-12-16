@@ -26,15 +26,15 @@ const proConfig = merge(baseConfig, {
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'css/[name]-[contenthash:7].min.css',
-      chunkFilename: 'css/[id]-[contenthash:12].min.css'
+      filename: 'static/css/[name]-[contenthash:7].min.css',
+      chunkFilename: 'static/css/[id]-[contenthash:12].min.css'
     }),
     // 配置 PWA
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true
     })
-    // new BundleAnalyzerPlugin()
+    // new BundleAnalyzerPlugin() // 打包分析
   ],
   optimization: {
     usedExports: true,
@@ -43,7 +43,7 @@ const proConfig = merge(baseConfig, {
       new UglifyJSPlugin({
         cache: true, // 开启缓存
         parallel: true, // 开启多线程编译
-        sourceMap: true,
+        sourceMap: true, // 映射文件
         uglifyOptions: {
           comments: true, // 注释保留与否
           warnings: false,
@@ -58,7 +58,7 @@ const proConfig = merge(baseConfig, {
         cssProcessorOptions: { discardComments: { removeAll: true } } // 清除CSS注释
       }),
       new CopyWebpackPlugin([
-        // 打包静态资源
+        // 打包额外的资源
         {
           from: path.resolve(__dirname, '../public/'),
           to: 'static',

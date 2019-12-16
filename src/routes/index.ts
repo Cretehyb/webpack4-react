@@ -1,7 +1,7 @@
 import { lazy } from 'react'
 
-const Login = lazy(() => import('@/containers/login/index.js'))
-const Home = lazy(() => import('@/containers/home/index.js'))
+const Login = lazy(() => import('@/containers/login/index'))
+const Home = lazy(() => import('@/containers/home/index'))
 
 const routes = [
   {

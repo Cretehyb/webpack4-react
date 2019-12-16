@@ -1,11 +1,11 @@
 import axios from 'axios'
-import qs from 'qs'
-import { timeOut, withCredentials } from '../utils/config'
+// import qs from 'qs'
+// import { timeOut, withCredentials } from '@/utils/config'
 
 let instance = axios.create({
   baseURL: process.env.BASE_API,
-  timeout: timeOut,
-  withCredentials: withCredentials
+  timeout: 5000
+  // withCredentials: withCredentials
   // headers: {'Authorization' : AUTH_TOKEN}
 })
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN; // token储存在header
@@ -19,7 +19,7 @@ instance.interceptors.request.use(
   },
   function(err) {
     //Do something with request error
-    return Promise.reject(error)
+    return Promise.reject(err)
   }
 )
 //添加一个响应拦截器
@@ -30,13 +30,13 @@ instance.interceptors.response.use(
   },
   function(err) {
     //Do something with response error
-    return Promise.reject(error)
+    return Promise.reject(err)
   }
 )
 
-export default class Request {
-  static get(url, params = {}) {
-    return new Promise((resolve, reject) => {
+const Request = {
+  get: (url: string, params = {}) => {
+    return new Promise<any>((resolve, reject) => {
       instance
         .get(url, params)
         .then(({ data }) => {
@@ -51,10 +51,9 @@ export default class Request {
           console.log(err)
         })
     })
-  }
-
-  static delete(url, params = {}) {
-    return new Promise((resolve, reject) => {
+  },
+  delete: (url: string, params = {}) => {
+    return new Promise<any>((resolve, reject) => {
       instance
         .delete(url, params)
         .then(({ data }) => {
@@ -64,10 +63,9 @@ export default class Request {
           reject({ err: JSON.stringify(err) })
         })
     })
-  }
-
-  static post(url, params = {}) {
-    return new Promise((resolve, reject) => {
+  },
+  post: (url: string, params = {}) => {
+    return new Promise<any>((resolve, reject) => {
       instance
         .post(url, params)
         .then(({ data }) => {
@@ -77,10 +75,10 @@ export default class Request {
           reject({ err: JSON.stringify(err) })
         })
     })
-  }
+  },
 
-  static put(url, params = {}) {
-    return new Promise((resolve, reject) => {
+  put: (url: string, params = {}) => {
+    return new Promise<any>((resolve, reject) => {
       instance
         .post(url, params)
         .then(({ data }) => {
@@ -90,10 +88,9 @@ export default class Request {
           reject({ err: JSON.stringify(err) })
         })
     })
-  }
-
-  static patch(url, params = {}) {
-    return new Promise((resolve, reject) => {
+  },
+  patch: (url: string, params = {}) => {
+    return new Promise<any>((resolve, reject) => {
       instance
         .patch(url, params)
         .then(({ data }) => {
@@ -105,3 +102,5 @@ export default class Request {
     })
   }
 }
+
+export default Request

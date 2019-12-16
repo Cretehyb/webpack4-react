@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { incrementReducer } from './increment'
+import { incrementReducer } from '@/store/reducers/increment'
 
 const rootReducer = combineReducers({
   incrementReducer

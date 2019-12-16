@@ -1,10 +1,10 @@
 import { put, call } from 'redux-saga/effects'
-import Api from '@/api/index'
+import { Increment } from '@/api/index'
 import { incrementSuccess, incrementFailure } from '@/store/actions/increment'
 
-export function* increment(action) {
+function* increment(action: { payload: {} }) {
   try {
-    const data = yield call(Api.Increment, action.payload)
+    const data: Array<Object> = yield call(Increment as any, action.payload)
     console.log(data)
     // 创建并 yield 一个 dispatch Effect
     yield put(incrementSuccess(data))
@@ -12,3 +12,4 @@ export function* increment(action) {
     yield put(incrementFailure(error))
   }
 }
+export { increment }

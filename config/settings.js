@@ -1,18 +1,17 @@
 'use strict'
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { prodUrl, devUrl } = require('../src/utils/config.js')
+const { prodUrl, devUrl } = require('../src/utils/config.ts')
 module.exports = {
   common: {
-    entryPath: path.resolve(__dirname, '../src/main.js'), //入口文件路径
-    entryPath2: path.resolve(__dirname, '../src/main2.js'),
+    entryPath: path.resolve(__dirname, '../src/main.tsx'), //入口文件路径
     reactHot: 'react-hot-loader/patch',
     babelPolyfill: '@babel/polyfill',
     outputPath: path.resolve(__dirname, '../dist'), //出口文件路径
-    outputFilename: 'js/[name]-bundle.js',
-    outputChunkFilename: 'js/[name]-[chunkhash:8].chunk.js', // 复用模块的名称
-    extensions: ['.js', '.json', '.css', '.less', 'scss', '.jsx'],
-    srcPath: path.resolve(__dirname, '../src'), //src根目录路径
+    outputFilename: 'static/js/[name]-bundle.js',
+    outputChunkFilename: 'static/js/[name]-[chunkhash:8].chunk.js', // 复用模块的名称
+    extensions: ['.js', 'jsx', '.ts', '.tsx'],
+    srcPath: path.resolve(__dirname, '../src/'), //src根目录路径
     components: path.resolve(__dirname, '../src/components'),
     public: path.resolve(__dirname, '../public'),
     env: path.resolve(__dirname, 'env.js'),

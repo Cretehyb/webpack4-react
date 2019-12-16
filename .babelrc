@@ -2,6 +2,7 @@
   "presets": [
     [
       "@babel/preset-env",
+      // "@babel/preset-typescript",
       {
         // 按需注入
         "useBuiltIns": "usage",
@@ -17,10 +18,12 @@
         "corejs": false,
         "helpers": true,
         "regenerator": true,
-        "useESModules": false
+        "useESModules": true
       }
     ],
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
     ["react-hot-loader/babel"], // react热重载(修改局部刷新)
+    ["@babel/plugin-syntax-dynamic-import"]
+    // ["@babel/plugin-transform-typescript"]
   ]
 }

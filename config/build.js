@@ -22,10 +22,10 @@ webpack(proConfig, function(err, stats) {
     }) + '\n\n'
   )
   console.log(chalk.cyan('  编译成功！\n'))
-  console.log(
-    chalk.yellow(
-      '  提示: 编译后的文件可以上传并且部署到服务器\n' +
-        '  通过file:// 打开index.html不会起作用.\n'
-    )
-  )
+  // console.log(
+  //   chalk.yellow(
+  //     '  提示: 编译后的文件可以上传并且部署到服务器\n' +
+  //       '  通过file:// 打开index.html不会起作用.\n'
+  //   )
+  // )
 })

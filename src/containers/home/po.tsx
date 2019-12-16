@@ -1,17 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, SFC } from 'react'
 import childComponent from './po.less'
 
-function Po(props) {
-  const inputRef = useRef()
-  const [count, changeCount] = useState(0)
+interface Props { }
+const Po: SFC<Props> = () => {
+  const [count, changeCount] = useState<number>(0)
+  const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     document.title = `You clicked ${count} times`
   }, [count])
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState<string>('')
   useEffect(() => {
-    console.log(inputRef.current.value)
+    if (inputRef.current) {
+      console.log(inputRef.current.value)
+    }
   }, [inputRef])
-  
+
   return (
     <div>
       <span className={childComponent.content}>{count} times</span>
@@ -41,3 +44,6 @@ export default Po
 // 3. 利用js的闭包的机制，state和props保存在函数作用域中
 // 4. 一些监听事件的绑定，需要在组件将要销毁前解绑，返回它的解绑事件(类似class组件中componentDidMount和componentWillUnmount)
 // 5. 不能在条件判断、for循环和嵌套函数中调用useEffect Hook，不然会导致React读取后面的Hook失败，如果想放可以放在Hook的内部
+
+// useRef:
+// 1. 这个hook是用来处理DOM，如表单

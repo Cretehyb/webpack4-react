@@ -2,13 +2,13 @@ import {
   INCREMENT,
   INCREMENT_SUCCESS,
   INCREMENT_FAILURE
-} from '../actions/increment'
+} from '@/store/actions/increment'
 
 const initialState = {
   musicList: []
 }
 
-export const incrementReducer = (state = initialState, action) => {
+export const incrementReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case INCREMENT:
       return { ...state }
