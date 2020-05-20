@@ -23,7 +23,8 @@
     ],
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
     ["react-hot-loader/babel"], // react热重载(修改局部刷新)
-    ["@babel/plugin-syntax-dynamic-import"]
+    ["@babel/plugin-syntax-dynamic-import"],
+    ["@babel/plugin-proposal-decorators", {"legacy": true }]
     // ["@babel/plugin-transform-typescript"]
   ]
 }

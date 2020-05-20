@@ -1,7 +1,8 @@
 declare namespace HomeLessModule {
   export interface IHomeLess {
     div: string
-    img: string
+    gotoLogin: string
+    imgBox: string
   }
 }
 

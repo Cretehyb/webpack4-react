@@ -1,3 +1,5 @@
 import Request from '@/api/request'
 
-export const Increment = () => Request.get('/')
+const Increment: any = (param: object) => Request.post('', param)
+
+export { Increment }

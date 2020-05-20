@@ -151,7 +151,7 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'react-saga-typescript-demo',
-      template: 'public/index.html.ejs',
+      template: 'public/index.html',
       favicon: 'public/favicon.ico',
       hash: true,
       showErrors: isDev ? true : false,
@@ -171,7 +171,8 @@ module.exports = {
           }
     }),
     // 进度条设置
-    new SimpleProgressPlugin()
+    new SimpleProgressPlugin(),
+    
   ]
   // 忽略文件过大提示
   // performance: {

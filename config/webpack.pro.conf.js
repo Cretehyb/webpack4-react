@@ -20,6 +20,9 @@ const commonOptions = {
 const proConfig = merge(baseConfig, {
   mode: 'production',
   devtool: settings.build.sourceMap,
+  output: {
+    publicPath: '/'
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': settings.build.env

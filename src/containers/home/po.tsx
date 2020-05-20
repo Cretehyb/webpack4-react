@@ -3,12 +3,15 @@ import childComponent from './po.less'
 
 interface Props { }
 const Po: SFC<Props> = () => {
-  const [count, changeCount] = useState<number>(0)
+  const [count, changeCount] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
     document.title = `You clicked ${count} times`
+    return () => {
+      document.title = 'react-saga-typescript-demo'
+    }
   }, [count])
-  const [value, setValue] = useState<string>('')
+  const [value, setValue] = useState('')
   useEffect(() => {
     if (inputRef.current) {
       console.log(inputRef.current.value)

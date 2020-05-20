@@ -20,7 +20,8 @@ module.exports = merge(baseConfig, {
     publicPath: settings.dev.assetsPublicPath,
     proxy: settings.dev.proxyTable,
     stats: settings.dev.stats,
-    quiet: settings.dev.quiet
+    quiet: settings.dev.quiet,
+    historyApiFallback: settings.dev.historyApiFallback
   },
   plugins: [
     new webpack.DefinePlugin({

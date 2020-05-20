@@ -1,14 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import store from '@/store/index.ts'
-import App from '@/containers/App.tsx'
+import store from './store/index'
+import App from './containers/App'
 
 ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('root') as HTMLElement
 )
 
 if (module.hot) {

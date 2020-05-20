@@ -1,8 +1,8 @@
 import axios from 'axios'
-// import qs from 'qs'
+import qs from 'qs'
 // import { timeOut, withCredentials } from '@/utils/config'
 
-let instance = axios.create({
+const instance = axios.create({
   baseURL: process.env.BASE_API,
   timeout: 5000
   // withCredentials: withCredentials
@@ -42,65 +42,30 @@ const Request = {
         .then(({ data }) => {
           if (data.code === 200) {
             const { result } = data
+            console.log(result, '请求结果')
             resolve(result)
           } else {
             reject('failed')
           }
         })
         .catch(err => {
-          console.log(err)
-        })
-    })
-  },
-  delete: (url: string, params = {}) => {
-    return new Promise<any>((resolve, reject) => {
-      instance
-        .delete(url, params)
-        .then(({ data }) => {
-          resolve(data)
-        })
-        .catch(err => {
-          reject({ err: JSON.stringify(err) })
+          console.log({ err: JSON.stringify(err) })
         })
     })
   },
   post: (url: string, params = {}) => {
     return new Promise<any>((resolve, reject) => {
       instance
-        .post(url, params)
+        .post(url, qs.stringify(params))
         .then(({ data }) => {
           resolve(data)
         })
         .catch(err => {
-          reject({ err: JSON.stringify(err) })
-        })
-    })
-  },
-
-  put: (url: string, params = {}) => {
-    return new Promise<any>((resolve, reject) => {
-      instance
-        .post(url, params)
-        .then(({ data }) => {
-          resolve(data)
-        })
-        .catch(err => {
-          reject({ err: JSON.stringify(err) })
-        })
-    })
-  },
-  patch: (url: string, params = {}) => {
-    return new Promise<any>((resolve, reject) => {
-      instance
-        .patch(url, params)
-        .then(({ data }) => {
-          resolve(data)
-        })
-        .catch(err => {
-          reject({ err: JSON.stringify(err) })
+          console.log({ err: JSON.stringify(err) })
         })
     })
   }
 }
+
 
 export default Request
