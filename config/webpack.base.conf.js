@@ -1,13 +1,20 @@
 'use strict'
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const ProgressBarWebpackPlugin = require('progress-bar-webpack-plugin')
+const SimpleProgressPlugin = require('webpack-simple-progress-plugin')
 const { isDev, isPro } = require('./env')
 const settings = require('./settings')
 
+const typingsForCssModulesLoaderConf = {
+  loader: '@teamsupercell/typings-for-css-modules-loader',
+  options: {
+    formatter: 'prettier'
+  }
+}
+
 module.exports = {
   entry: {
-    babelPolyfill: settings.common.babelPolyfill, // babel入口
+    // babelPolyfill: settings.common.babelPolyfill, // babel入口
     reactHot: settings.common.reactHot, // 热重载入口
     app: settings.common.entryPath // 应用入口
   },
@@ -20,7 +27,6 @@ module.exports = {
     extensions: settings.common.extensions,
     alias: {
       '@': settings.common.srcPath,
-      components: settings.common.components,
       public: settings.common.public,
       env: settings.common.env
     }
@@ -30,34 +36,50 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
+        exclude: /node_modules/,
         use: [
           isDev
             ? 'style-loader/useable'
             : settings.common.MiniCssExtractPluginConfig,
-          'css-loader?modules',
+          typingsForCssModulesLoaderConf,
+          'css-loader',
           'postcss-loader'
         ]
       },
       {
-        test: /\.less$/,
+        test: /\.(less)$/,
+        exclude: /node_modules/,
         use: [
           isDev ? 'style-loader' : settings.common.MiniCssExtractPluginConfig,
-          'css-loader?modules',
+          typingsForCssModulesLoaderConf,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          },
           'postcss-loader',
           'less-loader'
         ]
       },
       {
         test: /\.sass|scss$/,
+        exclude: /node_modules/,
         use: [
           isDev ? 'style-loader' : settings.common.MiniCssExtractPluginConfig,
-          'css-loader?modules',
+          typingsForCssModulesLoaderConf,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true
+            }
+          },
           'postcss-loader',
           'sass-loader'
         ]
       },
       {
-        test: /\.(js|jsx)$/,
+        test: /\.(js)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -69,6 +91,11 @@ module.exports = {
         }
       },
       {
+        test: /\.ts(x?)$/,
+        exclude: /node_modules/,
+        use: ['babel-loader', 'ts-loader']
+      },
+      {
         // 图片打包处理
         test: /\.(png|jpg|jpeg|gif|svg)$/,
         use: [
@@ -76,7 +103,7 @@ module.exports = {
             loader: 'url-loader',
             options: {
               limit: 5 * 1024,
-              name: 'img/[name].[hash:8].[ext]'
+              name: 'static/img/[name].[hash:8].[ext]'
             }
           },
           {
@@ -123,7 +150,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'react-saga-demo',
+      title: 'react-saga-typescript-demo',
       template: 'public/index.html',
       favicon: 'public/favicon.ico',
       hash: true,
@@ -144,18 +171,17 @@ module.exports = {
           }
     }),
     // 进度条设置
-    new ProgressBarWebpackPlugin({
-      format: 'build start [:bar] :percent (:elapsed seconds)'
-    })
-  ],
+    new SimpleProgressPlugin(),
+    
+  ]
   // 忽略文件过大提示
-  performance: {
-    hints: 'warning', // 枚举
-    maxAssetSize: 30000000, // 整数类型（以字节为单位）
-    maxEntrypointSize: 50000000, // 整数类型（以字节为单位）
-    assetFilter: function(assetFilename) {
-      // 提供资源文件名的断言函数
-      return assetFilename.endsWith('.css') || assetFilename.endsWith('.js')
-    }
-  }
+  // performance: {
+  //   hints: 'warning', // 枚举
+  //   maxAssetSize: 30000000, // 整数类型（以字节为单位）
+  //   maxEntrypointSize: 50000000, // 整数类型（以字节为单位）
+  //   assetFilter: function(assetFilename) {
+  //     // 提供资源文件名的断言函数
+  //     return assetFilename.endsWith('.css') || assetFilename.endsWith('.js')
+  //   }
+  // }
 }

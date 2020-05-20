@@ -1,36 +1,43 @@
+'use strict'
+const webpack = require('webpack')
 const path = require('path')
 const merge = require('webpack-merge')
 const baseConfig = require('./webpack.base.conf.js')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
-// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-'use strict'
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const settings = require('./settings')
 const utils = require('./utils')
+// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 
 const commonOptions = {
   chunks: 'all',
   reuseExistingChunk: true
 }
-module.exports = merge(baseConfig, {
+const proConfig = merge(baseConfig, {
   mode: 'production',
   devtool: settings.build.sourceMap,
+  output: {
+    publicPath: '/'
+  },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': settings.build.env
+    }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'css/[name]-[contenthash:7].min.css',
-      chunkFilename: 'css/[id]-[contenthash:12].min.css'
+      filename: 'static/css/[name]-[contenthash:7].min.css',
+      chunkFilename: 'static/css/[id]-[contenthash:12].min.css'
     }),
     // 配置 PWA
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true
     })
-    // new BundleAnalyzerPlugin()
+    // new BundleAnalyzerPlugin() // 打包分析
   ],
   optimization: {
     usedExports: true,
@@ -39,7 +46,7 @@ module.exports = merge(baseConfig, {
       new UglifyJSPlugin({
         cache: true, // 开启缓存
         parallel: true, // 开启多线程编译
-        sourceMap: true,
+        sourceMap: true, // 映射文件
         uglifyOptions: {
           comments: true, // 注释保留与否
           warnings: false,
@@ -54,7 +61,7 @@ module.exports = merge(baseConfig, {
         cssProcessorOptions: { discardComments: { removeAll: true } } // 清除CSS注释
       }),
       new CopyWebpackPlugin([
-        // 打包静态资源
+        // 打包额外的资源
         {
           from: path.resolve(__dirname, '../public/'),
           to: 'static',
@@ -89,4 +96,20 @@ module.exports = merge(baseConfig, {
     }
   }
 })
+if (settings.build.productionGzip) {
+  // 添加gzip压缩插件
+  const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
+  proConfig.plugins.push(
+    new CompressionWebpackPlugin({
+      filename: '[path].gz[query]', // 压缩后的文件名
+      algorithm: 'gzip', // 算法 默认gzip
+      test: new RegExp(
+        '\\.(' + settings.build.productionGzipExtensions.join('|') + ')$'
+      ), // 针对文件的正则表达式规则，符合规则的文件被压缩
+      threshold: 10240, // 文件大于这个值的会被压缩
+      minRatio: 0.8 // 压缩率 默认0.8
+    })
+  )
+}
+module.exports = proConfig
