@@ -10,7 +10,7 @@ const App: React.FC<{}> = () => {
       <Suspense fallback={<MyLoadingComponent {...{ isLoading: true }} />}>
         <Switch>
           {routes.map(v => (
-            <Route key={v.path} path={v.path} exact={v.path === '/home'}  component={v.component}></Route>
+            <Route key={v.path} path={v.path} exact={v.path === '/home'} component={v.component}></Route>
           ))}
           <Redirect from="/" to="/home" />
         </Switch>

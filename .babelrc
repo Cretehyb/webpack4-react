@@ -2,13 +2,13 @@
   "presets": [
     [
       "@babel/preset-env",
-      // "@babel/preset-typescript",
       {
         // 按需注入
         "useBuiltIns": "usage",
         "corejs": 2 // 这里需要注意：是根据你的版本来写
       }
     ],
+    "@babel/preset-typescript",
     "@babel/preset-react"
   ],
   "plugins": [
@@ -24,7 +24,7 @@
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
     ["react-hot-loader/babel"], // react热重载(修改局部刷新)
     ["@babel/plugin-syntax-dynamic-import"],
-    ["@babel/plugin-proposal-decorators", {"legacy": true }]
-    // ["@babel/plugin-transform-typescript"]
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-transform-typescript"]
   ]
 }

@@ -11,11 +11,12 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const settings = require('./settings')
 const utils = require('./utils')
-// const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+const SentryCliPlugin = require('@sentry/webpack-plugin')
 
 const commonOptions = {
   chunks: 'all',
-  reuseExistingChunk: true
+  reuseExistingChunk: true // 再利用存在的chunk
 }
 const proConfig = merge(baseConfig, {
   mode: 'production',
@@ -30,14 +31,21 @@ const proConfig = merge(baseConfig, {
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: 'static/css/[name]-[contenthash:7].min.css',
-      chunkFilename: 'static/css/[id]-[contenthash:12].min.css'
+      chunkFilename: 'static/css/[name]-[contenthash:12].min.css'
     }),
     // 配置 PWA
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true
-    })
-    // new BundleAnalyzerPlugin() // 打包分析
+    }),
+    new BundleAnalyzerPlugin(), // 打包分析
+    // new SentryCliPlugin({
+    //   include: '../dist/static/js', // 作用的文件夹，如果只想js报错就./dist/js
+    //   release: process.env.RELEASE_VERSION, // 一致的版本号
+    //   configFile: 'sentry.properties', // 不用改
+    //   ignore: ['node_modules', 'postcss.config.js'],
+    //   urlPrefix: '~/' //这里指的你项目需要观测的文件如果你的项目有publicPath这里加上就对了
+    // })
   ],
   optimization: {
     usedExports: true,
@@ -65,7 +73,7 @@ const proConfig = merge(baseConfig, {
         {
           from: path.resolve(__dirname, '../public/'),
           to: 'static',
-          ignore: ['index.html', 'favicon.ico'] // 忽略模板html和网页图标
+          ignore: ['index.html', 'second.html', 'favicon.ico'] // 忽略模板html和网页图标
         }
       ])
     ],

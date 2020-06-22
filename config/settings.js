@@ -2,14 +2,20 @@
 const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { prodUrl, devUrl } = require('../src/utils/config.ts')
+const { isDev, isPro } = require('./env')
 module.exports = {
   common: {
     entryPath: path.resolve(__dirname, '../src/main.tsx'), //入口文件路径
+    second: path.resolve(__dirname, '../src/second.tsx'),
     reactHot: 'react-hot-loader/patch',
     babelPolyfill: '@babel/polyfill',
     outputPath: path.resolve(__dirname, '../dist'), //出口文件路径
-    outputFilename: 'static/js/[name]-bundle.js',
-    outputChunkFilename: 'static/js/[name]-[chunkhash:8].chunk.js', // 复用模块的名称
+    outputFilename: isDev
+      ? 'static/js/[name]-[hash:8].js'
+      : 'static/js/[name]-[contenthash:8].js',
+    outputChunkFilename: isDev
+      ? 'static/js/[name]-[hash:8].chunk.js'
+      : 'static/js/[name]-[contenthash:8].chunk.js', // 复用模块的名称
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     srcPath: path.resolve(__dirname, '../src/'), //src根目录路径
     components: path.resolve(__dirname, '../src/components'),
@@ -29,7 +35,7 @@ module.exports = {
     },
     assetsSubDirectory: '', //生成资源路径二级
     assetsPublicPath: '/', //生成资源路径
-    sourceMap: '', //生成映射文件
+    sourceMap: '', //生成映射文件(cheap-module-source-map)
     productionGzip: true,
     productionGzipExtensions: ['js', 'css']
   },

@@ -1,22 +1,26 @@
-import React, { PureComponent, useState, useCallback } from 'react'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
+import React from 'react'
+// import { bindActionCreators } from 'redux'
+// import { connect } from 'react-redux'
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import login from './index.less'
-import Detail from '../details/details';
+import login from './login.less'
+import Detail from '../details/index';
 
 interface Props extends RouteComponentProps { }
-interface State { }
+// interface State { }
 
 const Login = (props: Props) => {
   console.log(props.history.location)
   const backToHomePage = () => {
-    props.history.push('/home', { userInfo: { name: '123', id: '01' } })
+    props.history.push({ pathname: '/home', state: { name: '123', id: '01' } })
   }
+  // const handleError = () => {
+  //   throw new Error('xxxx')
+  // }
 
   return (
     <div>
       <h3>登录页</h3>
+      {/* <button type={'button'} onClick={handleError}>生成错误信息</button> */}
       <div className={login.returns} onClick={backToHomePage}>
         返回首页
         </div>

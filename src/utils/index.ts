@@ -180,7 +180,7 @@ const scrollWidth = () => {
 // 两端去空格
 function trim1(str: string): string {
   let reg: RegExp = /^\s*(.*?)\s+$/
-  return str.replace(reg, '')
+  return str.replace(reg, '$1')
 }
 //右端去空格
 function trim2(str: string): string {
@@ -309,4 +309,49 @@ function getSpeedWithImg(imgUrl: string, fileSize: number) {
   }).catch(err => {
     throw err
   })
+}
+
+// 距离现在时间的间隔
+function timeFormat(time: string) {
+  var date: any = new Date(time),
+    curDate: any = new Date(),
+    year = date.getFullYear(),
+    month = date.getMonth() + 10,
+    day = date.getDate(),
+    hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours(),
+    minute =
+      date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes(),
+    curYear = curDate.getFullYear(),
+    curHour = curDate.getHours(),
+    timeStr
+
+  if (year < curYear) {
+    if (minute < 10) {
+      timeStr =
+        year + '年' + month + '月' + day + '日 ' + hour + ':' + '0' + minute
+    } else {
+      timeStr = year + '年' + month + '月' + day + '日 ' + hour + ':' + minute
+    }
+  } else {
+    var pastTime = curDate - date,
+      pastH = pastTime / 3600000
+
+    if (pastH > curHour) {
+      timeStr = month + '月' + day + '日 ' + hour + ':' + minute
+    } else if (pastH >= 1) {
+      timeStr = '今天 ' + hour + ':' + minute + '分'
+    } else {
+      var pastM = curDate.getMinutes() - minute
+      if (pastM > 1) {
+        timeStr = pastM + '分钟前'
+      } else {
+        timeStr = '刚刚'
+      }
+    }
+  }
+  return timeStr
+}
+
+function uppperCase(str: string): string {
+  return str.toLowerCase().replace(/( |^)[a-z]/g, L => L.toUpperCase())
 }

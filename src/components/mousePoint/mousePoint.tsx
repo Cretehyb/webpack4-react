@@ -1,17 +1,17 @@
 import React from 'react';
 
-interface _props {
+interface Props {
     render: (point: {
         x: number | null,
         y: number | null
     }) => React.ReactElement<HTMLDivElement>
 }
-interface _state {
-    readonly x: number | null,
-    readonly y: number | null
+interface State {
+     x: number | null,
+     y: number | null
 }
-class MousePoint extends React.Component<_props, _state> {
-    constructor(props: _props) {
+class MousePoint extends React.Component<Props, State> {
+    constructor(props: Props) {
         super(props);
         this.state = {
             x: null,

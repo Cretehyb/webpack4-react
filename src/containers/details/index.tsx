@@ -2,6 +2,7 @@ import React, { useState, useContext, createContext, useReducer, useEffect, SFC,
 import { Reducer } from 'redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import detailStyles from './details.less';
+import { ActionConstruction, DetailState, Props } from './details'
 // const Detail: React.FC = () => {
 //     const [count, setCount] = useState(0)
 //     return (
@@ -34,16 +35,6 @@ import detailStyles from './details.less';
 //         </div>
 //     )
 // }
-interface ActionConstruction {
-    type: string,
-    payload?: Object
-}
-interface DetailState {
-    count: number;
-}
-interface Props extends RouteComponentProps {
-
-}
 const initialState: DetailState = { count: 0 };
 const reducer: Reducer<DetailState, ActionConstruction> = (state = initialState, action: ActionConstruction) => {
     switch (action.type) {
@@ -59,7 +50,7 @@ const reducer: Reducer<DetailState, ActionConstruction> = (state = initialState,
 }
 let areEqual
 const Detail: SFC<Props> = (props: Props) => {
-    console.log('子组件渲染了')
+    // console.log('子组件渲染了')
     const [state, dispatch] = useReducer(reducer, initialState)
     // const areEqual = (prevProps: Props, nextProps: Props) => {
     //     return prevProps.name === prevProps.name

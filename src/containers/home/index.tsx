@@ -2,41 +2,27 @@ import React, { PureComponent } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { increment } from '@/store/actions/increment'
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import homeStyles from './home.less'
 import Po from './po'
+import { Props, Methods, ParamsG } from './home'
 
-interface MusicList extends Array<object> {
-  length: number
-}
-interface Props extends RouteComponentProps {
-  musicList: MusicList
-  incrementDispatch: (args?: object) => { args?: object },
-  dispatch: () => Promise<void>;
-}
+class Home extends PureComponent<Props> implements Methods {
 
-class Home extends PureComponent<Props> {
-
-  private goToLogin = () => {
-    interface ParamsG {
-      id: number,
-      name: string,
-      key: number
-    }
+  public goToLogin = () => {
     const Params: ParamsG = { id: 12412412, name: 'lijun', key: 22 }
     this.props.history.push({ pathname: '/login', state: Params })
   }
-  private gotoDetail = () => {
+  public gotoDetail = () => {
     this.props.history.push({ pathname: '/detail', state: {} })
   }
-  private init = () => {
+  public init = () => {
     this.props.incrementDispatch({ title: 'guide' })
   }
-  public async componentDidMount() {
-    await this.init()
+  public componentDidMount() {
+    this.init()
   }
   render(): JSX.Element {
-    console.log(this.props)
     const { musicList } = this.props
     let picListJSX: JSX.Element[] | JSX.Element
     if (!musicList.length) {

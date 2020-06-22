@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <meta data-vmid="description" name="description" content="webpack4+react构建">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta
+      data-vmid="description"
+      name="description"
+      content="webpack4+react构建"
+    />
     <title><%= htmlWebpackPlugin.options.title %></title>
-    <% if(htmlWebpackPlugin.options.cdn) {%>
-      <% for(var css of htmlWebpackPlugin.options.cdn.css) { %>
-        <link rel="stylesheet" href="<%=css%>">
-      <% } %>
-    <% } %>
+    <% if(htmlWebpackPlugin.options.cdn) {%> <% for(var css of
+    htmlWebpackPlugin.options.cdn.css) { %>
+    <link rel="stylesheet" href="<%=css%>" />
+    <% } %> <% } %>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but the template doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong
+        >We're sorry but the template doesn't work properly without JavaScript
+        enabled. Please enable it to continue.</strong
+      >
     </noscript>
     <div id="root"></div>
   </body>
-  <% if(htmlWebpackPlugin.options.cdn) {%>
-		<% for(var js of htmlWebpackPlugin.options.cdn.js) { %>
-			<script src="<%=js%>"></script>
-		<% } %>
-  <% } %>
+  <% if(htmlWebpackPlugin.options.cdn) {%> <% for(var js of
+  htmlWebpackPlugin.options.cdn.js) { %>
+  <script src="<%=js%>"></script>
+  <% } %> <% } %>
 </html>
