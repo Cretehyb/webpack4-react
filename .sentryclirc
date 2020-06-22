@@ -1,0 +1,7 @@
+[auth]
+token="c0c7fc37f2564bb19cb9501d646fcf073820c9515d19441fa25832037b9641e3"
+
+[defaults]
+url = https://sentry.io
+org = hyb
+project = hyb-ut

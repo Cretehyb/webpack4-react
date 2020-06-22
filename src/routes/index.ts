@@ -1,9 +1,14 @@
 import { lazy } from 'react'
 
-const Login = lazy(() => import('@/containers/login/index'))
-const Home = lazy(() => import('@/containers/home/index'))
-const Detail = lazy(() => import('@/containers/details/details'))
-
+const Login = lazy(() =>
+  import(/* webpackChunkName: "login" */ '@/containers/login/index')
+)
+const Home = lazy(() =>
+  import(/* webpackChunkName: "home" */ '@/containers/home/index')
+)
+const Detail = lazy(() =>
+  import(/* webpackChunkName: "detail" */ '@/containers/details/index')
+)
 
 const routes = [
   {

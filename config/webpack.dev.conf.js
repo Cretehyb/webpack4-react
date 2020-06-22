@@ -27,7 +27,7 @@ module.exports = merge(baseConfig, {
     new webpack.DefinePlugin({
       'process.env': settings.dev.env
     }),
-    new webpack.HotModuleReplacementPlugin({}),
+    // new webpack.HotModuleReplacementPlugin({}),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
     new friendlyErrorsWebpackPlugin({

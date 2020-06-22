@@ -5,18 +5,11 @@ const SimpleProgressPlugin = require('webpack-simple-progress-plugin')
 const { isDev, isPro } = require('./env')
 const settings = require('./settings')
 
-const typingsForCssModulesLoaderConf = {
-  loader: '@teamsupercell/typings-for-css-modules-loader',
-  options: {
-    formatter: 'prettier'
-  }
-}
-
 module.exports = {
   entry: {
-    // babelPolyfill: settings.common.babelPolyfill, // babel入口
     reactHot: settings.common.reactHot, // 热重载入口
     app: settings.common.entryPath // 应用入口
+    // second: settings.common.second // 副入口
   },
   output: {
     path: settings.common.outputPath,
@@ -28,7 +21,7 @@ module.exports = {
     alias: {
       '@': settings.common.srcPath,
       public: settings.common.public,
-      env: settings.common.env
+      env: settings.common.env,
     }
   },
 
@@ -41,8 +34,14 @@ module.exports = {
           isDev
             ? 'style-loader/useable'
             : settings.common.MiniCssExtractPluginConfig,
-          typingsForCssModulesLoaderConf,
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[local]_[hash:5]'
+              }
+            }
+          },
           'postcss-loader'
         ]
       },
@@ -51,11 +50,12 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           isDev ? 'style-loader' : settings.common.MiniCssExtractPluginConfig,
-          typingsForCssModulesLoaderConf,
           {
             loader: 'css-loader',
             options: {
-              modules: true
+              modules: {
+                localIdentName: '[local]_[hash:5]'
+              }
             }
           },
           'postcss-loader',
@@ -67,11 +67,12 @@ module.exports = {
         exclude: /node_modules/,
         use: [
           isDev ? 'style-loader' : settings.common.MiniCssExtractPluginConfig,
-          typingsForCssModulesLoaderConf,
           {
             loader: 'css-loader',
             options: {
-              modules: true
+              modules: {
+                localIdentName: '[local]_[hash:5]'
+              }
             }
           },
           'postcss-loader',
@@ -151,11 +152,13 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'react-saga-typescript-demo',
+      filename: 'index.html',
       template: 'public/index.html',
       favicon: 'public/favicon.ico',
       hash: true,
       showErrors: isDev ? true : false,
-      // chunks: ['app'], // 用于多入口文件
+      inject: true,
+      // chunks: ['manifest', 'vendor', 'app'], // 用于多入口文件
       cdn: {
         css: [],
         js: []
@@ -170,9 +173,27 @@ module.exports = {
             removeAttributeQuotes: true
           }
     }),
+    // new HtmlWebpackPlugin({
+    //   // title: 'react-saga-typescript-demo-second',
+    //   filename: 'second.html',
+    //   template: 'public/second.html',
+    //   favicon: 'public/favicon.ico',
+    //   hash: true,
+    //   showErrors: isDev ? true : false,
+    //   inject: true,
+    //   chunks: ['manifest', 'vendor', 'second'], // 用于多入口文件
+    //   minify: isDev
+    //     ? {}
+    //     : {
+    //         removeComments: true,
+    //         collapseWhitespace: true,
+    //         minifyCSS: true,
+    //         minifyJS: true,
+    //         removeAttributeQuotes: true
+    //       }
+    // }),
     // 进度条设置
-    new SimpleProgressPlugin(),
-    
+    new SimpleProgressPlugin()
   ]
   // 忽略文件过大提示
   // performance: {
