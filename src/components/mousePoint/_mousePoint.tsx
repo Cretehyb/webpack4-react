@@ -5,7 +5,7 @@ interface RenderPointsProps {
     };
 }
 
-const RenderPoint: React.SFC<RenderPointsProps> = (props: RenderPointsProps) => {
+const RenderPoint: React.FC<RenderPointsProps> = (props: RenderPointsProps) => {
     const { point } = props;
     return (
         <div> current posiont of x is {point.x} y is {point.y} </div>

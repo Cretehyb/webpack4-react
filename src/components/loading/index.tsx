@@ -1,9 +1,9 @@
-import React, { SFC } from 'react'
+import React, { FC } from 'react'
 
 interface Props {
   isLoading: boolean
 }
-const MyLoadingComponent: SFC<Props> = ({ isLoading = true }) => {
+const MyLoadingComponent: FC<Props> = ({ isLoading = true }) => {
   if (isLoading) {
     return (
       <div>Loading...</div>

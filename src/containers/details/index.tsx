@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext, useReducer, useEffect, SFC, memo } from 'react';
+import React, { useState, useContext, createContext, useReducer, useEffect, FC, memo } from 'react';
 import { Reducer } from 'redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import detailStyles from './details.less';
@@ -49,7 +49,7 @@ const reducer: Reducer<DetailState, ActionConstruction> = (state = initialState,
     }
 }
 let areEqual
-const Detail: SFC<Props> = (props: Props) => {
+const Detail: FC<Props> = (props: Props) => {
     // console.log('子组件渲染了')
     const [state, dispatch] = useReducer(reducer, initialState)
     // const areEqual = (prevProps: Props, nextProps: Props) => {

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, SFC } from 'react'
+import React, { useState, useEffect, useRef, FC } from 'react'
 import childComponent from './po.less'
 
 interface Props { }
-const Po: SFC<Props> = () => {
+const Po: FC<Props> = () => {
   const [count, changeCount] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   useEffect(() => {
